@@ -1,0 +1,184 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Playfair+Display:wght@700;900&family=Montserrat:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;900&family=Rozha+One&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 98%;
+    --foreground: 0 0% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+
+    --primary: 351 100% 26%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 43 89% 38%;
+    --secondary-foreground: 0 0% 10%;
+
+    --muted: 0 0% 93%;
+    --muted-foreground: 0 0% 38%;
+
+    --accent: 40 80% 50%;
+    --accent-foreground: 0 0% 10%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 88%;
+    --input: 0 0% 88%;
+    --ring: 0 72% 35%;
+
+    --radius: 0.375rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --steel-dark: 220 15% 15%;
+    --steel-mid: 220 10% 30%;
+    --steel-light: 220 8% 65%;
+    --gold: 40 90% 32%;
+    --crimson: 0 72% 35%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3 {
+    @apply font-rozha tracking-tight;
+  }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes slideOutLeft {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100%); }
+}
+
+#lovable-badge {
+  display: none !important;
+}
+
+#whatsapp-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background-color: #25D366;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+  animation: whatsappPulse 2s infinite;
+}
+
+#whatsapp-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(37,211,102,0.5);
+}
+
+#whatsapp-button:active {
+  transform: scale(0.95);
+}
+
+#whatsapp-button svg {
+  width: 40px;
+  height: 40px;
+}
+
+@keyframes whatsappPulse {
+  0%, 100% { box-shadow: 0 4px 12px rgba(37,211,102,0.2); }
+  50% { box-shadow: 0 4px 25px rgba(37,211,102,0.4); }
+}
+
+@media (max-width: 480px) {
+  #whatsapp-button {
+    bottom: 15px;
+    right: 15px;
+    width: 55px;
+    height: 55px;
+  }
+  #whatsapp-button svg {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+/* Slick Carousel Fade Transition Optimization */
+.product-card-slider .slick-slide {
+  transition: opacity 1000ms cubic-bezier(0.87, 0, 0.13, 1);
+}
+
+.product-card-slider,
+.product-card-slider .slick-list,
+.product-card-slider .slick-track,
+.product-card-slider .slick-slide > div {
+  height: 100% !important;
+}
+
+.product-card-slider .slick-list {
+  overflow: hidden !important;
+}
+
+/* Custom Scrollbar Utilities */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media print {
+  @page { 
+    margin: 0; 
+    size: auto;
+  }
+  body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    background: white !important;
+  }
+  .no-print, header, nav {
+    display: none !important;
+  }
+  .print-container {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
+
