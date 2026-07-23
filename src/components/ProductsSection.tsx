@@ -764,7 +764,13 @@ const ProductCard = ({ product, onClick, index, isVisible }: ProductCardProps) =
           <Slider {...settings} className="w-full product-card-slider">
             {(product.frontImages || product.images).map((src: string, i: number) => (
               <div key={i} className="outline-none">
-                <img src={src} className="card-img-custom object-cover block" alt={product.name} />
+                <img 
+                  src={src} 
+                  className="card-img-custom object-cover block" 
+                  alt={product.name} 
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
             ))}
           </Slider>
@@ -966,7 +972,7 @@ const ProductsSection = () => {
     const touchEndX = e.changedTouches[0].clientX;
     const distance = touchStartX.current - touchEndX;
     const minSwipeDistance = 50;
-    
+
     if (distance > minSwipeDistance) {
       setActiveImgIdx((prev) => (prev < displayImages.length - 1 ? prev + 1 : 0));
     } else if (distance < -minSwipeDistance) {
@@ -1081,6 +1087,8 @@ const ProductsSection = () => {
               </span>
             </div>
 
+
+
             {/* Main Image Viewport Area (Perfectly Centered in middle gap) */}
             <div className="flex-1 w-full flex items-center justify-center px-12 relative overflow-hidden">
               {/* Navigation Arrows (Fixed to Viewport Edges) */}
@@ -1091,7 +1099,7 @@ const ProductsSection = () => {
                 <ChevronLeft size={20} strokeWidth={2.5} />
               </button>
 
-              <div 
+              <div
                 className="relative flex items-center justify-center w-full max-h-[96%] overflow-visible group"
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
@@ -1170,7 +1178,7 @@ const ProductsSection = () => {
               {/* Left Column: Image Viewer */}
               {displayImages.length > 0 && (
                 <div className="w-full md:w-[55%] p-4 md:p-8 flex flex-col gap-4 md:gap-6 bg-[#F8FAFC] h-[350px] shrink-0 md:h-auto md:flex-1">
-                  <div 
+                  <div
                     className="relative flex-1 min-h-0 w-full flex items-center justify-center group"
                     onTouchStart={handleTouchStart}
                     onTouchEnd={handleTouchEnd}
