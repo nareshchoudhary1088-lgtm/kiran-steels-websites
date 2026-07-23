@@ -57,9 +57,16 @@ const ContactSection = () => {
           </p>
         </div>
 
-        {/* Map Container - Now Placed Directly After Intro Text */}
         <div className="rounded-2xl overflow-hidden border border-slate-200 shadow-2xl p-2 bg-white mb-16 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-          <div className="w-full h-[250px] sm:h-[320px] bg-slate-100 rounded-xl overflow-hidden shadow-inner">
+          <a
+            href="https://maps.app.goo.gl/7TiWppK8ibbWjSXt7"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full h-[250px] sm:h-[320px] bg-slate-100 rounded-xl overflow-hidden shadow-inner relative group"
+            title="Open in Google Maps"
+          >
+            {/* Invisible overlay to capture clicks and add a subtle hover effect */}
+            <div className="absolute inset-0 z-10 bg-transparent cursor-pointer group-hover:bg-black/5 transition-colors duration-300" />
             <iframe
               title="Kiran Steels Location"
               src="https://maps.google.com/maps?q=Kiran+Steels+Gopalapatnam+Visakhapatnam&output=embed&z=16"
@@ -68,8 +75,9 @@ const ContactSection = () => {
               style={{ border: 0 }}
               allowFullScreen
               loading="lazy"
+              className="pointer-events-none"
             />
-          </div>
+          </a>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-16 items-start">

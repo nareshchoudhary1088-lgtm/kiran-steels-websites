@@ -789,6 +789,7 @@ const ProductsSection = () => {
   const [activeImgIdx, setActiveImgIdx] = useState<number>(0);
   const mobileThumbRef = useRef<HTMLDivElement>(null);
   const desktopThumbRef = useRef<HTMLDivElement>(null);
+  const touchStartX = useRef<number | null>(null);
   const [sectionVisible, setSectionVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -956,6 +957,24 @@ const ProductsSection = () => {
     return () => window.removeEventListener('openProduct', handleOpenProduct);
   }, []);
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const distance = touchStartX.current - touchEndX;
+    const minSwipeDistance = 50;
+    
+    if (distance > minSwipeDistance) {
+      setActiveImgIdx((prev) => (prev < displayImages.length - 1 ? prev + 1 : 0));
+    } else if (distance < -minSwipeDistance) {
+      setActiveImgIdx((prev) => (prev > 0 ? prev - 1 : displayImages.length - 1));
+    }
+    touchStartX.current = null;
+  };
+
   return (
     <section id="product" ref={sectionRef} className="py-24 bg-[#eef1f5] relative min-h-screen">
       <div className="container mx-auto px-4 md:px-10 max-w-[1200px]">
@@ -1072,7 +1091,11 @@ const ProductsSection = () => {
                 <ChevronLeft size={20} strokeWidth={2.5} />
               </button>
 
-              <div className="relative flex items-center justify-center w-full max-h-[96%] overflow-visible group">
+              <div 
+                className="relative flex items-center justify-center w-full max-h-[96%] overflow-visible group"
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+              >
                 <img
                   src={displayImages[activeImgIdx]}
                   className="max-w-full max-h-full w-auto h-auto rounded-[32px] shadow-[0_20px_50px_rgba(15,23,42,0.15)] animate-in fade-in zoom-in-95 duration-500"
@@ -1147,7 +1170,11 @@ const ProductsSection = () => {
               {/* Left Column: Image Viewer */}
               {displayImages.length > 0 && (
                 <div className="w-full md:w-[55%] p-4 md:p-8 flex flex-col gap-4 md:gap-6 bg-[#F8FAFC] h-[350px] shrink-0 md:h-auto md:flex-1">
-                  <div className="relative flex-1 min-h-0 w-full flex items-center justify-center group">
+                  <div 
+                    className="relative flex-1 min-h-0 w-full flex items-center justify-center group"
+                    onTouchStart={handleTouchStart}
+                    onTouchEnd={handleTouchEnd}
+                  >
                     <div className="absolute top-0 left-0 z-10 bg-[#1E3A8A] text-white px-3 py-1 rounded-[6px] text-[10px] font-bold uppercase tracking-wider shadow-lg">
                       Product {String(activeImgIdx + 1).padStart(2, '0')}
                     </div>
