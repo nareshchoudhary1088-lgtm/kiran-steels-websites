@@ -16,7 +16,6 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react(), 
-    mode === "development" && componentTagger(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'icon-192.png', 'icon-512.png'],
