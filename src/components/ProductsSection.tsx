@@ -95,7 +95,11 @@ const goldLetters = filterAssets('ss-gold-letters').filter(url =>
   !url.includes('ss-gold-letters-1.png') &&
   !url.includes('ss-gold-letters-2.png') &&
   !url.includes('ss-gold-letters-3.png') &&
-  !url.includes('ss-gold-letters-4.png')
+  !url.includes('ss-gold-letters-4.png') &&
+  !url.includes('ss-gold-letters-real-1.png') &&
+  !url.includes('ss-gold-letters-real-2.png') &&
+  !url.includes('ss-gold-letters-real-3.png') &&
+  !url.includes('ss-gold-letters-real-4.png')
 );
 const ganeshLetters = filterAssets('ss-letters-ganesh');
 
@@ -598,6 +602,7 @@ const ProductCard = ({ product, onClick, index, isVisible }: ProductCardProps) =
     arrows: false,
     dots: false,
     pauseOnHover: false,
+    lazyLoad: "ondemand" as const,
     cssEase: "cubic-bezier(0.87, 0, 0.13, 1)"
   };
 

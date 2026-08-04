@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, ChevronDown, ArrowRight, CircleDot, Sheet, DoorOpen, Building2, Layers, Glasses, Columns3, Grid2X2, Type, Activity, Home, Armchair } from "lucide-react";
 import ksLogo from "../assets/ks_logo.png";
 
@@ -23,10 +24,40 @@ const Navbar = () => {
   const [productDropdownOpen, setProductDropdownOpen] = useState(false);
   const [mobileProductOpen, setMobileProductOpen] = useState(false);
   const dropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isHome = location.pathname === "/";
+
+  const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
+
+      if (window.scrollY < 50) {
+        setActiveSection("");
+        return;
+      }
+
+      // Determine active section for scroll spy
+      const sections = ["home", "about-us", "product", "get-quote", "enquiry-form"];
+      let current = "";
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.top <= 200) { // Slightly larger threshold to catch it earlier
+            current = section;
+          }
+        }
+      }
+      if (current) {
+        if (current === "get-quote" || current === "enquiry-form") {
+          setActiveSection("enquiry-form");
+        } else {
+          setActiveSection(current);
+        }
+      }
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -66,12 +97,15 @@ const Navbar = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
-          ? "bg-white/95 backdrop-blur-md shadow-sm py-2"
-          : "bg-white py-3"
-        }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 px-2 sm:px-6 pt-2 sm:pt-4 pointer-events-none`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-10 flex items-center justify-between">
+      <div
+        className={`mx-auto flex items-center justify-between transition-all duration-500 pointer-events-auto ${
+          scrolled
+            ? "bg-white/85 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.08)] border border-amber-500/30 py-2 px-4 sm:px-8 rounded-full max-w-6xl"
+            : "bg-white/95 backdrop-blur-md shadow-[0_4px_20px_rgba(245,158,11,0.05)] border border-amber-500/20 py-3 px-5 sm:px-10 rounded-2xl max-w-7xl"
+        }`}
+      >
         {/* Brand */}
         <a href="#home" className="flex items-center gap-4 group">
           <div className="relative h-20 w-20 sm:h-20 sm:w-20 rounded-full overflow-hidden shrink-0">
@@ -97,14 +131,25 @@ const Navbar = () => {
                 onMouseLeave={handleDropdownLeave}
               >
                 <a
-                  href={link.href}
-                  className="text-sm lg:text-base font-medium transition-all duration-300 hover:text-primary text-slate-700 flex items-center gap-1"
+                  href={isHome ? link.href : `/${link.href}`}
+                  onClick={(e) => {
+                    if (!isHome) {
+                      e.preventDefault();
+                      navigate(`/${link.href}`);
+                    }
+                  }}
+                  className={`relative text-sm lg:text-base font-medium transition-all duration-300 hover:text-primary flex items-center gap-1 ${
+                    activeSection === link.href.substring(1) ? "text-primary font-bold" : "text-slate-700"
+                  }`}
                 >
                   {link.name}
                   <ChevronDown
                     size={14}
                     className={`transition-transform duration-300 ${productDropdownOpen ? "rotate-180 text-primary" : ""}`}
                   />
+                  <span className={`absolute -bottom-1 left-0 h-0.5 bg-primary transition-all duration-300 ${
+                    activeSection === link.href.substring(1) ? "w-full" : "w-0"
+                  }`} />
                 </a>
 
                 {/* Premium Dropdown */}
@@ -139,9 +184,13 @@ const Navbar = () => {
                         return (
                           <a
                             key={item.name}
-                            href="#product"
+                            href={isHome ? "#product" : "/#product"}
                             className="group/item flex flex-col items-center gap-2 p-3 rounded-xl transition-all duration-200 hover:bg-slate-50 hover:shadow-md border border-transparent hover:border-slate-200 text-center"
-                            onClick={() => {
+                            onClick={(e) => {
+                              if (!isHome) {
+                                e.preventDefault();
+                                navigate("/#product");
+                              }
                               setProductDropdownOpen(false);
                               setTimeout(() => {
                                 window.dispatchEvent(new CustomEvent('openProduct', { detail: item.full }));
@@ -165,9 +214,15 @@ const Navbar = () => {
                     {/* Footer CTA */}
                     <div className="border-t border-slate-100 bg-gradient-to-r from-slate-50 to-red-50/40">
                       <a
-                        href="#product"
+                        href={isHome ? "#product" : "/#product"}
                         className="group/cta flex items-center justify-between px-5 py-3 transition-all duration-200 hover:bg-red-50/60"
-                        onClick={() => setProductDropdownOpen(false)}
+                        onClick={(e) => {
+                          if (!isHome) {
+                            e.preventDefault();
+                            navigate("/#product");
+                          }
+                          setProductDropdownOpen(false);
+                        }}
                       >
                         <span className="text-xs font-bold text-primary tracking-wide uppercase">
                           View All Products
@@ -184,13 +239,22 @@ const Navbar = () => {
             ) : (
               <a
                 key={link.name}
-                href={link.href}
-                className={`text-sm lg:text-base font-medium transition-all duration-300 hover:text-primary ${link.highlight
+                href={isHome ? link.href : `/${link.href}`}
+                onClick={(e) => {
+                  if (!isHome) {
+                    e.preventDefault();
+                    navigate(`/${link.href}`);
+                  }
+                }}
+                className={`relative text-sm lg:text-base transition-all duration-300 hover:text-primary ${link.highlight
                     ? "text-secondary font-bold text-base lg:text-lg"
-                    : "text-slate-700"
+                    : activeSection === link.href.substring(1) ? "text-primary font-bold" : "text-slate-700 font-medium"
                   }`}
               >
                 {link.name}
+                <span className={`absolute -bottom-1 left-0 h-0.5 transition-all duration-300 ${link.highlight ? "bg-secondary" : "bg-primary"} ${
+                  activeSection === link.href.substring(1) ? "w-full" : "w-0"
+                }`} />
               </a>
             )
           )}
@@ -208,7 +272,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {open && (
-        <div className="md:hidden bg-white border-t border-slate-100 px-6 py-6 flex flex-col gap-2 shadow-xl animate-in fade-in slide-in-from-top-4 duration-300">
+        <div className="md:hidden bg-white border-t border-slate-100 px-6 py-6 flex flex-col gap-2 shadow-xl animate-in fade-in slide-in-from-top-4 duration-300 pointer-events-auto">
           {links.map((link) =>
             link.hasDropdown ? (
               <div key={link.name}>
@@ -233,9 +297,13 @@ const Navbar = () => {
                       return (
                         <a
                           key={item.name}
-                          href="#product"
+                          href={isHome ? "#product" : "/#product"}
                           className="flex items-center gap-3 text-sm text-slate-700 font-semibold py-2.5 px-3 rounded-xl hover:bg-slate-50 border border-slate-100 transition-all duration-200"
-                          onClick={() => {
+                          onClick={(e) => {
+                            if (!isHome) {
+                              e.preventDefault();
+                              navigate("/#product");
+                            }
                             setOpen(false);
                             setMobileProductOpen(false);
                             setTimeout(() => {
@@ -258,12 +326,18 @@ const Navbar = () => {
             ) : (
               <a
                 key={link.name}
-                href={link.href}
+                href={isHome ? link.href : `/${link.href}`}
                 className={`text-base font-bold tracking-wide py-3 px-4 rounded-sm transition-colors ${link.highlight
                     ? "text-secondary hover:bg-secondary/5"
                     : "text-slate-800 hover:bg-slate-50"
                   }`}
-                onClick={() => setOpen(false)}
+                onClick={(e) => {
+                  if (!isHome) {
+                    e.preventDefault();
+                    navigate(`/${link.href}`);
+                  }
+                  setOpen(false);
+                }}
               >
                 {link.name}
               </a>

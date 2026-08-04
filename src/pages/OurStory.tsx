@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Award, ShieldCheck, Truck, Users } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import TrustSignalsSection from "@/components/TrustSignalsSection";
+import FAQSection from "@/components/FAQSection";
 import inventoryImg from "@/assets/story/inventory.png";
 import workshopImg from "@/assets/story/workshop.png";
 
@@ -118,6 +120,11 @@ const OurStory = () => {
 
             </div>
           </div>
+        </div>
+        
+        <div className="mt-20">
+          <TrustSignalsSection />
+          <FAQSection />
         </div>
       </main>
 

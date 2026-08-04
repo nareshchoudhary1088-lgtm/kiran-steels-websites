@@ -126,8 +126,13 @@ const Footer = () => {
 
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
           <p className="text-white/40 text-[10px] sm:text-xs uppercase tracking-widest font-bold">© 2025 Kiran Steels. All rights reserved.</p>
-          <div className="flex gap-4">
+          <div className="flex gap-4 items-center">
+            <a href="https://twitter.com/KiranSteels" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-secondary transition-colors" aria-label="Twitter">
+              <svg xmlns="http://www.svgrepo.com/show/331615/twitter.svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
+            </a>
+            <span className="text-white/40 text-[10px] sm:text-xs uppercase tracking-widest font-bold hidden sm:inline">|</span>
             <span className="text-white/40 text-[10px] sm:text-xs uppercase tracking-widest font-bold">Visakhapatnam</span>
+            <span className="text-white/40 text-[10px] sm:text-xs uppercase tracking-widest font-bold hidden sm:inline">|</span>
             <span className="text-white/40 text-[10px] sm:text-xs uppercase tracking-widest font-bold">Andhra Pradesh</span>
           </div>
         </div>
