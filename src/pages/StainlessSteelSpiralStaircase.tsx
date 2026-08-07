@@ -1,8 +1,10 @@
 import SEO from "../components/SEO";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { products } from "../data/products";
 
 const StainlessSteelSpiralStaircase = () => {
+  const product = products.find(p => p.name === "Stainless Steel Spiral Staircase");
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
       <SEO 
@@ -19,6 +21,24 @@ const StainlessSteelSpiralStaircase = () => {
               Space-saving and elegant stainless steel spiral staircases for homes and commercial spaces.
             </p>
             {/* More content can be added here */}
+            {/* Image Gallery for SEO */}
+            {product && product.images && product.images.length > 0 && (
+              <div className="mt-12 mb-12">
+                <h2 className="text-2xl font-bold text-slate-900 mb-6">Our Designs & Projects</h2>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {product.images.map((img: string, idx: number) => (
+                    <img 
+                      key={idx} 
+                      src={img} 
+                      alt={`Kiran Steels - ${product.name} - Design ${idx + 1}`} 
+                      className="w-full h-auto rounded-xl object-cover shadow-sm hover:shadow-md transition-shadow border border-slate-100"
+                      loading="lazy"
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 mt-8">
               <h2 className="text-xl font-bold text-slate-900 mb-4">Request a Quote</h2>
               <p className="text-slate-600 mb-4">Interested in our Stainless Steel Spiral Staircase? Contact us today for a customized quote.</p>
