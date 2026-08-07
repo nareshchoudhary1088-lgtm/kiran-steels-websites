@@ -11,7 +11,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "postbuild": "node copy-404.cjs"
+    "postbuild": "node copy-404.cjs && node generate_image_sitemap.cjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

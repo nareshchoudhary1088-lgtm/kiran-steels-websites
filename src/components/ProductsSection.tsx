@@ -772,7 +772,7 @@ const ProductCard = ({ product, onClick, index, isVisible }: ProductCardProps) =
                 <img 
                   src={src} 
                   className="card-img-custom object-cover block" 
-                  alt={product.name} 
+                  alt={`${product.name} Preview ${i + 1}`} 
                   loading="lazy"
                   decoding="async"
                 />
@@ -1112,7 +1112,7 @@ const ProductsSection = () => {
                 <img
                   src={displayImages[activeImgIdx]}
                   className="max-w-full max-h-full w-auto h-auto rounded-[32px] shadow-[0_20px_50px_rgba(15,23,42,0.15)] animate-in fade-in zoom-in-95 duration-500"
-                  alt="product"
+                  alt={`Kiran Steels - ${activeSubCat || selectedProduct.name} - Image ${activeImgIdx + 1}`}
                 />
               </div>
 
@@ -1133,7 +1133,7 @@ const ProductsSection = () => {
                     onClick={() => setActiveImgIdx(i)}
                     className={`flex-shrink-0 w-[84px] h-[84px] rounded-[24px] overflow-hidden border-[4.5px] transition-all shadow-xl ${activeImgIdx === i ? 'border-[#1e3a8a] scale-115 z-10' : 'border-white opacity-50 grayscale-[0.3]'}`}
                   >
-                    <img src={img} className="w-full h-full object-cover" alt="thumb" />
+                    <img src={img} className="w-full h-full object-cover" alt={`Kiran Steels - ${activeSubCat || selectedProduct.name} - Thumbnail ${i + 1}`} />
                   </div>
                 ))}
               </div>
@@ -1195,7 +1195,7 @@ const ProductsSection = () => {
                     <img
                       src={displayImages[activeImgIdx]}
                       className="max-w-full max-h-full w-auto h-auto rounded-[16px] shadow-[0_10px_30px_rgba(0,0,0,0.15)] animate-in fade-in zoom-in-95 duration-500"
-                      alt={selectedProduct.name}
+                      alt={`Kiran Steels - ${activeSubCat || selectedProduct.name} - Image ${activeImgIdx + 1}`}
                     />
 
                     {/* Navigation Arrows */}
@@ -1221,7 +1221,7 @@ const ProductsSection = () => {
                         onClick={() => setActiveImgIdx(i)}
                         className={`relative min-w-[70px] h-[70px] rounded-[14px] overflow-hidden cursor-pointer border-2 transition-all ${activeImgIdx === i ? 'border-[#2563EB] scale-95 shadow-md' : 'border-transparent hover:border-[#2563EB]/30'}`}
                       >
-                        <img src={img} className="w-full h-full object-cover" alt="thumbnail" />
+                        <img src={img} className="w-full h-full object-cover" alt={`Kiran Steels - ${activeSubCat || selectedProduct.name} - Thumbnail ${i + 1}`} />
                       </div>
                     ))}
                   </div>
