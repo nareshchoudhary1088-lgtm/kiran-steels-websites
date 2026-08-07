@@ -11,7 +11,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "postbuild": "node copy-404.cjs"
+    "postbuild": "react-snap && node copy-404.cjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

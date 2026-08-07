@@ -4,18 +4,18 @@ import { Menu, X, ChevronDown, ArrowRight, CircleDot, Sheet, DoorOpen, Building2
 import ksLogo from "../assets/ks_logo.png";
 
 const productCategories = [
-  { name: "Pipes & Tubes", full: "Stainless Steel Pipes & Tubes", icon: CircleDot, color: "from-blue-500 to-blue-700" },
-  { name: "Fitting Items", full: "Stainless Steel Fitting Items", icon: Sheet, color: "from-slate-500 to-slate-700" },
-  { name: "Gates", full: "Stainless Steel Gates", icon: DoorOpen, color: "from-red-500 to-red-700" },
-  { name: "Compound Gates", full: "Stainless Steel Compound Gates", icon: Building2, color: "from-orange-500 to-orange-700" },
-  { name: "Railing", full: "Stainless Steel Railing", icon: Layers, color: "from-emerald-500 to-emerald-700" },
-  { name: "Glass Railing", full: "Stainless Steel Glass Railing", icon: Glasses, color: "from-cyan-500 to-cyan-700" },
-  { name: "Balkani", full: "Stainless Steel Balkani", icon: Columns3, color: "from-purple-500 to-purple-700" },
-  { name: "Utility Box & Grills", full: "Stainless Steel Box and Grills", icon: Grid2X2, color: "from-amber-500 to-amber-700" },
-  { name: "Signboards", full: "Stainless Steel Letters (Signboards)", icon: Type, color: "from-pink-500 to-pink-700" },
-  { name: "Spiral Staircase", full: "Stainless Steel Spiral Staircase", icon: Activity, color: "from-indigo-500 to-indigo-700" },
-  { name: "Mandir Designs", full: "Stainless Steel Mandir Designs", icon: Home, color: "from-rose-500 to-rose-700" },
-  { name: "Chairs & Tables", full: "Stainless Steel Chairs & Tables", icon: Armchair, color: "from-teal-500 to-teal-700" },
+  { name: "Pipes & Tubes", full: "Stainless Steel Pipes & Tubes", slug: "stainless-steel-pipes", icon: CircleDot, color: "from-blue-500 to-blue-700" },
+  { name: "Fitting Items", full: "Stainless Steel Fitting Items", slug: "stainless-steel-fitting-items", icon: Sheet, color: "from-slate-500 to-slate-700" },
+  { name: "Gates", full: "Stainless Steel Gates", slug: "stainless-steel-gates", icon: DoorOpen, color: "from-red-500 to-red-700" },
+  { name: "Compound Gates", full: "Stainless Steel Compound Gates", slug: "stainless-steel-compound-gates", icon: Building2, color: "from-orange-500 to-orange-700" },
+  { name: "Railing", full: "Stainless Steel Railing", slug: "stainless-steel-railing", icon: Layers, color: "from-emerald-500 to-emerald-700" },
+  { name: "Glass Railing", full: "Stainless Steel Glass Railing", slug: "stainless-steel-glass-railing", icon: Glasses, color: "from-cyan-500 to-cyan-700" },
+  { name: "Balkani", full: "Stainless Steel Balkani", slug: "stainless-steel-balkani", icon: Columns3, color: "from-purple-500 to-purple-700" },
+  { name: "Utility Box & Grills", full: "Stainless Steel Box and Grills", slug: "stainless-steel-box-grills", icon: Grid2X2, color: "from-amber-500 to-amber-700" },
+  { name: "Signboards", full: "Stainless Steel Letters (Signboards)", slug: "stainless-steel-signboards", icon: Type, color: "from-pink-500 to-pink-700" },
+  { name: "Spiral Staircase", full: "Stainless Steel Spiral Staircase", slug: "stainless-steel-spiral-staircase", icon: Activity, color: "from-indigo-500 to-indigo-700" },
+  { name: "Mandir Designs", full: "Stainless Steel Mandir Designs", slug: "stainless-steel-mandir-designs", icon: Home, color: "from-rose-500 to-rose-700" },
+  { name: "Chairs & Tables", full: "Stainless Steel Chairs & Tables", slug: "stainless-steel-chairs-tables", icon: Armchair, color: "from-teal-500 to-teal-700" },
 ];
 
 const Navbar = () => {
@@ -28,36 +28,16 @@ const Navbar = () => {
   const navigate = useNavigate();
   const isHome = location.pathname === "/";
 
-  const [activeSection, setActiveSection] = useState("");
+  const isActive = (href: string) => {
+    if (href === "" && location.pathname === "/") return true;
+    if (href !== "" && location.pathname === `/${href}`) return true;
+    if (href === "products" && location.pathname.includes("stainless-steel")) return true;
+    return false;
+  };
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
-
-      if (window.scrollY < 50) {
-        setActiveSection("");
-        return;
-      }
-
-      // Determine active section for scroll spy
-      const sections = ["home", "about-us", "product", "get-quote", "enquiry-form"];
-      let current = "";
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 200) { // Slightly larger threshold to catch it earlier
-            current = section;
-          }
-        }
-      }
-      if (current) {
-        if (current === "get-quote" || current === "enquiry-form") {
-          setActiveSection("enquiry-form");
-        } else {
-          setActiveSection(current);
-        }
-      }
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -89,10 +69,10 @@ const Navbar = () => {
   };
 
   const links = [
-    { name: "Home", href: "#home" },
+    { name: "Home", href: "" },
     { name: "About Us", href: "#about-us" },
-    { name: "Product", href: "#product", hasDropdown: true },
-    { name: "Get Quote", href: "#enquiry-form", highlight: true },
+    { name: "Products", href: "#product", hasDropdown: true },
+    { name: "Contact", href: "#get-quote", highlight: true },
   ];
 
   return (
@@ -131,15 +111,27 @@ const Navbar = () => {
                 onMouseLeave={handleDropdownLeave}
               >
                 <a
-                  href={isHome ? link.href : `/${link.href}`}
+                  href={`/${link.href}`}
                   onClick={(e) => {
-                    if (!isHome) {
-                      e.preventDefault();
+                    e.preventDefault();
+                    if (link.href.startsWith('#')) {
+                      if (location.pathname !== '/') {
+                        navigate(`/${link.href}`);
+                      } else {
+                        const id = link.href.substring(1);
+                        const element = document.getElementById(id);
+                        if (element) {
+                          const yOffset = -100; 
+                          const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                          window.scrollTo({top: y, behavior: 'smooth'});
+                        }
+                      }
+                    } else {
                       navigate(`/${link.href}`);
                     }
                   }}
-                  className={`relative text-sm lg:text-base font-medium transition-all duration-300 hover:text-primary flex items-center gap-1 ${
-                    activeSection === link.href.substring(1) ? "text-primary font-bold" : "text-slate-700"
+                  className={`relative group text-sm lg:text-base font-medium transition-all duration-300 hover:text-primary flex items-center gap-1 ${
+                    isActive(link.href) ? "text-primary font-bold" : "text-slate-700"
                   }`}
                 >
                   {link.name}
@@ -148,7 +140,7 @@ const Navbar = () => {
                     className={`transition-transform duration-300 ${productDropdownOpen ? "rotate-180 text-primary" : ""}`}
                   />
                   <span className={`absolute -bottom-1 left-0 h-0.5 bg-primary transition-all duration-300 ${
-                    activeSection === link.href.substring(1) ? "w-full" : "w-0"
+                    isActive(link.href) ? "w-full" : "w-0 group-hover:w-full"
                   }`} />
                 </a>
 
@@ -184,17 +176,24 @@ const Navbar = () => {
                         return (
                           <a
                             key={item.name}
-                            href={isHome ? "#product" : "/#product"}
+                            href={`/${item.slug}`}
                             className="group/item flex flex-col items-center gap-2 p-3 rounded-xl transition-all duration-200 hover:bg-slate-50 hover:shadow-md border border-transparent hover:border-slate-200 text-center"
                             onClick={(e) => {
-                              if (!isHome) {
-                                e.preventDefault();
+                              e.preventDefault();
+                              if (location.pathname !== "/") {
                                 navigate("/#product");
+                                setTimeout(() => {
+                                  window.dispatchEvent(new CustomEvent('openProduct', { detail: item.full }));
+                                }, 300);
+                              } else {
+                                const el = document.getElementById("product");
+                                if (el) {
+                                  const y = el.getBoundingClientRect().top + window.pageYOffset - 100;
+                                  window.scrollTo({top: y, behavior: 'smooth'});
+                                }
+                                window.dispatchEvent(new CustomEvent('openProduct', { detail: item.full }));
                               }
                               setProductDropdownOpen(false);
-                              setTimeout(() => {
-                                window.dispatchEvent(new CustomEvent('openProduct', { detail: item.full }));
-                              }, 100);
                             }}
                             style={{ animationDelay: `${idx * 30}ms` }}
                           >
@@ -214,13 +213,11 @@ const Navbar = () => {
                     {/* Footer CTA */}
                     <div className="border-t border-slate-100 bg-gradient-to-r from-slate-50 to-red-50/40">
                       <a
-                        href={isHome ? "#product" : "/#product"}
+                        href="/stainless-steel-pipes"
                         className="group/cta flex items-center justify-between px-5 py-3 transition-all duration-200 hover:bg-red-50/60"
                         onClick={(e) => {
-                          if (!isHome) {
-                            e.preventDefault();
-                            navigate("/#product");
-                          }
+                          e.preventDefault();
+                          navigate("/stainless-steel-pipes");
                           setProductDropdownOpen(false);
                         }}
                       >
@@ -239,21 +236,34 @@ const Navbar = () => {
             ) : (
               <a
                 key={link.name}
-                href={isHome ? link.href : `/${link.href}`}
+                href={`/${link.href}`}
                 onClick={(e) => {
-                  if (!isHome) {
-                    e.preventDefault();
+                  e.preventDefault();
+                  if (link.href.startsWith('#')) {
+                    if (location.pathname !== '/') {
+                      navigate(`/${link.href}`);
+                    } else {
+                      const id = link.href.substring(1);
+                      const element = document.getElementById(id);
+                      if (element) {
+                        const yOffset = -100;
+                        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                        window.scrollTo({top: y, behavior: 'smooth'});
+                      }
+                    }
+                  } else {
                     navigate(`/${link.href}`);
                   }
+                  setOpen(false);
                 }}
-                className={`relative text-sm lg:text-base transition-all duration-300 hover:text-primary ${link.highlight
+                className={`relative group text-sm lg:text-base transition-all duration-300 hover:text-primary ${link.highlight
                     ? "text-secondary font-bold text-base lg:text-lg"
-                    : activeSection === link.href.substring(1) ? "text-primary font-bold" : "text-slate-700 font-medium"
+                    : isActive(link.href) ? "text-primary font-bold" : "text-slate-700 font-medium"
                   }`}
               >
                 {link.name}
                 <span className={`absolute -bottom-1 left-0 h-0.5 transition-all duration-300 ${link.highlight ? "bg-secondary" : "bg-primary"} ${
-                  activeSection === link.href.substring(1) ? "w-full" : "w-0"
+                  isActive(link.href) ? "w-full" : "w-0 group-hover:w-full"
                 }`} />
               </a>
             )
@@ -297,18 +307,25 @@ const Navbar = () => {
                       return (
                         <a
                           key={item.name}
-                          href={isHome ? "#product" : "/#product"}
+                          href={`/${item.slug}`}
                           className="flex items-center gap-3 text-sm text-slate-700 font-semibold py-2.5 px-3 rounded-xl hover:bg-slate-50 border border-slate-100 transition-all duration-200"
                           onClick={(e) => {
-                            if (!isHome) {
-                              e.preventDefault();
+                            e.preventDefault();
+                            if (location.pathname !== "/") {
                               navigate("/#product");
+                              setTimeout(() => {
+                                window.dispatchEvent(new CustomEvent('openProduct', { detail: item.full }));
+                              }, 300);
+                            } else {
+                              const el = document.getElementById("product");
+                              if (el) {
+                                const y = el.getBoundingClientRect().top + window.pageYOffset - 100;
+                                window.scrollTo({top: y, behavior: 'smooth'});
+                              }
+                              window.dispatchEvent(new CustomEvent('openProduct', { detail: item.full }));
                             }
                             setOpen(false);
                             setMobileProductOpen(false);
-                            setTimeout(() => {
-                              window.dispatchEvent(new CustomEvent('openProduct', { detail: item.full }));
-                            }, 100);
                           }}
                         >
                           <div
