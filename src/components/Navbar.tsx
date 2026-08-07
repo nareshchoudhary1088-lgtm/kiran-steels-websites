@@ -29,7 +29,7 @@ const Navbar = () => {
   const isHome = location.pathname === "/";
 
   const isActive = (href: string) => {
-    if (href === "" && location.pathname === "/") return true;
+    if (href === "") return false; // Never show persistent active underline for Home
     if (href !== "" && location.pathname === `/${href}`) return true;
     if (href === "products" && location.pathname.includes("stainless-steel")) return true;
     return false;
@@ -239,7 +239,14 @@ const Navbar = () => {
                 href={`/${link.href}`}
                 onClick={(e) => {
                   e.preventDefault();
-                  if (link.href.startsWith('#')) {
+                  if (link.href === "") {
+                    if (location.pathname !== "/") {
+                      navigate("/");
+                      window.scrollTo(0, 0);
+                    } else {
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }
+                  } else if (link.href.startsWith('#')) {
                     if (location.pathname !== '/') {
                       navigate(`/${link.href}`);
                     } else {
@@ -343,14 +350,33 @@ const Navbar = () => {
             ) : (
               <a
                 key={link.name}
-                href={isHome ? link.href : `/${link.href}`}
+                href={`/${link.href}`}
                 className={`text-base font-bold tracking-wide py-3 px-4 rounded-sm transition-colors ${link.highlight
                     ? "text-secondary hover:bg-secondary/5"
                     : "text-slate-800 hover:bg-slate-50"
                   }`}
                 onClick={(e) => {
-                  if (!isHome) {
-                    e.preventDefault();
+                  e.preventDefault();
+                  if (link.href === "") {
+                    if (location.pathname !== "/") {
+                      navigate("/");
+                      window.scrollTo(0, 0);
+                    } else {
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }
+                  } else if (link.href.startsWith('#')) {
+                    if (location.pathname !== '/') {
+                      navigate(`/${link.href}`);
+                    } else {
+                      const id = link.href.substring(1);
+                      const element = document.getElementById(id);
+                      if (element) {
+                        const yOffset = -100;
+                        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                        window.scrollTo({top: y, behavior: 'smooth'});
+                      }
+                    }
+                  } else {
                     navigate(`/${link.href}`);
                   }
                   setOpen(false);
