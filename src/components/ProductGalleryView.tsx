@@ -5,10 +5,11 @@ import { products, PipesDetails, FittingsDetails } from "../data/products";
 interface ProductGalleryViewProps {
   selectedProduct: any;
   onClose?: () => void;
+  initialSubCat?: string | null;
 }
 
-const ProductGalleryView: React.FC<ProductGalleryViewProps> = ({ selectedProduct, onClose }) => {
-  const [activeSubCat, setActiveSubCat] = useState<string | null>(null);
+const ProductGalleryView: React.FC<ProductGalleryViewProps> = ({ selectedProduct, onClose, initialSubCat }) => {
+  const [activeSubCat, setActiveSubCat] = useState<string | null>(initialSubCat || null);
   const [activeImgIdx, setActiveImgIdx] = useState<number>(0);
   const mobileThumbRef = useRef<HTMLDivElement>(null);
   const desktopThumbRef = useRef<HTMLDivElement>(null);

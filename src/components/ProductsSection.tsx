@@ -543,6 +543,7 @@ const ProductsSection = () => {
       {selectedProduct && (
         <ProductGalleryView 
           selectedProduct={selectedProduct} 
+          initialSubCat={activeSubCat}
           onClose={() => {
             if (selectedProduct.subCategories) {
               setSelectionProduct(selectedProduct);
